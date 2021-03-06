@@ -31,6 +31,9 @@ import {
   getNumberFormatter,
   NumberFormats,
   CategoricalColorNamespace,
+  // nflx start
+  TimeFormatter,
+  // nflx end
 } from '@superset-ui/core';
 // nflx start
 import { utcDay, utcYear } from 'd3-time';
