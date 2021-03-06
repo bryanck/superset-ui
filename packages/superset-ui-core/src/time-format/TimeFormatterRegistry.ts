@@ -20,6 +20,9 @@ import { RegistryWithDefaultKey, OverwritePolicy } from '../models';
 import TimeFormats, { LOCAL_PREFIX } from './TimeFormats';
 import createD3TimeFormatter from './factories/createD3TimeFormatter';
 import TimeFormatter from './TimeFormatter';
+// nflx start
+import { utcDay, utcYear } from 'd3-time';
+// nflx end
 
 export default class TimeFormatterRegistry extends RegistryWithDefaultKey<
   TimeFormatter,
@@ -45,7 +48,20 @@ export default class TimeFormatterRegistry extends RegistryWithDefaultKey<
     // Create new formatter if does not exist
     const useLocalTime = targetFormat.startsWith(LOCAL_PREFIX);
     const formatString = targetFormat.replace(LOCAL_PREFIX, '');
-    const formatter = createD3TimeFormatter({ formatString, useLocalTime });
+
+    // nflx start
+    let formatter;
+    if (formatString === '%J' && !useLocalTime) {
+      formatter = new TimeFormatter({
+        id: formatString,
+        formatFunc: (d: Date) => utcDay.count(utcYear(d), d).toString(),
+      });
+    } else {
+      formatter = createD3TimeFormatter({ formatString, useLocalTime });
+    }
+    //const formatter = createD3TimeFormatter({ formatString, useLocalTime });
+    // nflx end
+
     this.registerValue(targetFormat, formatter);
 
     return formatter;
