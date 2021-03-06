@@ -43,13 +43,6 @@ describe('TimeFormatterRegistry', () => {
       expect(formatter).toBeInstanceOf(TimeFormatter);
       expect(formatter.format(PREVIEW_TIME)).toEqual('2017');
     });
-    // nflx start
-    it('special %J format', () => {
-      const formatter = registry.get('%J');
-      expect(formatter).toBeInstanceOf(TimeFormatter);
-      expect(formatter.format(PREVIEW_TIME)).toEqual('44');
-    });
-    //nflx end
   });
   describe('.format(format, value)', () => {
     it('return the value with the specified format', () => {
