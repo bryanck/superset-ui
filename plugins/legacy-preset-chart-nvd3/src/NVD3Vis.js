@@ -31,7 +31,13 @@ import {
   getNumberFormatter,
   NumberFormats,
   CategoricalColorNamespace,
+  // nflx start
+  TimeFormatter,
+  // nflx end
 } from '@superset-ui/core';
+// nflx start
+import { utcDay, utcYear } from 'd3-time';
+// nflx end
 
 import 'nvd3-fork/build/nv.d3.css';
 
@@ -566,7 +572,18 @@ function nvd3Vis(element, props) {
 
     let xAxisFormatter;
     if (isTimeSeries) {
-      xAxisFormatter = getTimeFormatter(xAxisFormat);
+      // nflx start
+      if (xAxisFormat === '%J') {
+        xAxisFormatter = new TimeFormatter({
+          id: xAxisFormat,
+          formatFunc: d => utcDay.count(utcYear(d), d).toString(),
+        });
+      } else {
+        xAxisFormatter = getTimeFormatter(xAxisFormat);
+      }
+      //xAxisFormatter = getTimeFormatter(xAxisFormat);
+      // nflx end
+
       // In tooltips, always use the verbose time format
       chart.interactiveLayer.tooltip.headerFormatter(smartDateVerboseFormatter);
     } else {
